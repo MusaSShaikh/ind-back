@@ -1,20 +1,21 @@
-from flask import Flask, Blueprint, jsonify
+from flask import Flask
 from flask_cors import CORS
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 CORS(app)
 
-data_api = Blueprint('data_api', __name__)
+# MySQL configurations
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_PORT'] = 3306
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'Pass1234'
+app.config['MYSQL_DB'] = 'sakila'
 
-# Sample data
-data = ["Item 1", "Item 2", "Item 3"]
+mysql = MySQL(app)
 
-@data_api.route('/api/data')
-def get_data():
-    return jsonify(data)
-
-# Register blueprint
-app.register_blueprint(data_api)
+# Import routes after initializing Flask app
+import routes
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
